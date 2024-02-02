@@ -2,15 +2,17 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: proper-solution
+  labels:
+    app: api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: proper-solution
+      app: api
   template:
     metadata:
       labels:
-        app: proper-solution
+        app: api
     spec:
       containers:
       - name: proper-solution
@@ -24,15 +26,3 @@ spec:
           httpGet:
             path: /health
             port: 5000
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: proper-service
-spec:
-  selector:
-    app: proper-solution
-  ports:
-    - protocol: TCP
-      port: 3000
-      targetPort: 5000
