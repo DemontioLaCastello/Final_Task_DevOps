@@ -15,6 +15,8 @@ cd /home/vagrant/k8s
 
 minikube addons enable ingress
 
+kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
+
 kubectl apply -f deployment.proper.yaml
 kubectl apply -f deployment.fallback.yaml
 kubectl apply -f ingress.yaml
