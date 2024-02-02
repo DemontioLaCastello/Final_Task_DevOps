@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proper-solution
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: proper-solution
+  template:
+    metadata:
+      labels:
+        app: proper-solution
+    spec:
+      containers:
+      - name: proper-solution
+        image: proper-solution:latest
+        imagePullPolicy: IfNotPresent
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proper-service
+spec:
+  selector:
+    app: proper-solution
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 5000

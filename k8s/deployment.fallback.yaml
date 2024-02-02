@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fallback-solution
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fallback-solution
+  template:
+    metadata:
+      labels:
+        app: fallback-solution
+    spec:
+      containers:
+      - name: fallback-solution
+        image: fallback-solution:latest
+        imagePullPolicy: IfNotPresent
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fallback-service
+spec:
+  selector:
+    app: fallback-solution
+  ports:
+    - protocol: TCP
+      port: 4000
+      targetPort: 5000
